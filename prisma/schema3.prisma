@@ -1,0 +1,386 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/database3"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL_3")
+}
+
+model department_emp_iclaim {
+  id          Int       @id
+  Description String?   @db.VarChar(50)
+  Level_id    Int?
+  isParent    Int?
+  Location    String?   @db.VarChar(255)
+  head        String?   @db.VarChar(50)
+  pic         String?   @db.VarChar(50)
+  create_date DateTime? @db.Date
+}
+
+model employee {
+  id                 Int       @id @default(autoincrement())
+  is_active          Int?
+  Employee_Code      String?   @db.VarChar(100)
+  nik                String?   @db.VarChar(100)
+  Address_Line_1     String?   @db.VarChar(255)
+  Address_Line_2     String?   @db.VarChar(255)
+  MailId             String?   @db.VarChar(100)
+  employment_ou      String?   @db.VarChar(100)
+  employment_ou_desc String?   @db.VarChar(100)
+  supervisor_nik     String?   @db.VarChar(100)
+  Supervisor         String?   @db.VarChar(100)
+  Supervisor_Name    String?   @db.VarChar(100)
+  position_code      String?   @db.VarChar(100)
+  position_desc      String?   @db.VarChar(100)
+  job_grade_code     String?   @db.VarChar(100)
+  job_grade_desc     String?   @db.VarChar(100)
+  org_work_locn_code String?   @db.VarChar(100)
+  org_work_locn_desc String?   @db.VarChar(100)
+  Employee_Name      String?   @db.VarChar(100)
+  gender_code        String?   @db.VarChar(100)
+  Date_Of_joining    DateTime? @db.DateTime(0)
+  date_of_birth      DateTime? @db.DateTime(0)
+  Marital_Status     String?   @db.VarChar(100)
+  last_update        DateTime? @db.DateTime(0)
+}
+
+model employee_copy1 {
+  id                 Int       @id @default(autoincrement())
+  Employee_Code      String?   @db.VarChar(100)
+  nik                String?   @db.VarChar(100)
+  Address_Line_1     String?   @db.VarChar(255)
+  Address_Line_2     String?   @db.VarChar(255)
+  MailId             Int?
+  employment_ou      String?   @db.VarChar(100)
+  employment_ou_desc String?   @db.VarChar(100)
+  supervisor_nik     String?   @db.VarChar(100)
+  Supervisor         String?   @db.VarChar(100)
+  Supervisor_Name    String?   @db.VarChar(100)
+  position_code      String?   @db.VarChar(100)
+  position_desc      String?   @db.VarChar(100)
+  job_grade_code     String?   @db.VarChar(100)
+  job_grade_desc     String?   @db.VarChar(100)
+  org_work_locn_code String?   @db.VarChar(100)
+  org_work_locn_desc String?   @db.VarChar(100)
+  Employee_Name      String?   @db.VarChar(100)
+  gender_code        String?   @db.VarChar(100)
+  Date_Of_joining    DateTime? @db.DateTime(0)
+  date_of_birth      DateTime? @db.DateTime(0)
+  Marital_Status     String?   @db.VarChar(100)
+}
+
+model employee_data {
+  id                 Int       @id @default(autoincrement())
+  Employee_Code      String?   @db.VarChar(100)
+  nik                String?   @db.VarChar(100)
+  Address_Line_1     String?   @db.VarChar(255)
+  Address_Line_2     String?   @db.VarChar(255)
+  MailId             String?   @db.VarChar(100)
+  employment_ou      String?   @db.VarChar(100)
+  employment_ou_desc String?   @db.VarChar(100)
+  supervisor_nik     String?   @db.VarChar(100)
+  Supervisor         String?   @db.VarChar(100)
+  Supervisor_Name    String?   @db.VarChar(100)
+  position_code      String?   @db.VarChar(100)
+  position_desc      String?   @db.VarChar(100)
+  job_grade_code     String?   @db.VarChar(100)
+  job_grade_desc     String?   @db.VarChar(100)
+  org_work_locn_code String?   @db.VarChar(100)
+  org_work_locn_desc String?   @db.VarChar(100)
+  Employee_Name      String?   @db.VarChar(100)
+  gender_code        String?   @db.VarChar(100)
+  Date_Of_joining    DateTime? @db.DateTime(0)
+  date_of_birth      DateTime? @db.DateTime(0)
+  Marital_Status     String?   @db.VarChar(100)
+  last_update        DateTime? @db.DateTime(0)
+}
+
+model hak_akses {
+  nik         String @id @db.VarChar(11)
+  user_levels Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model mst_department {
+  id              Int       @id
+  department_code String?   @db.LongText
+  department_name String?   @db.LongText
+  division_id     Int?
+  is_active       String?   @db.VarChar(5)
+  is_deleted      String?   @db.VarChar(5)
+  created_at      DateTime? @db.DateTime(0)
+  created_by      String?   @db.LongText
+  updated_at      DateTime? @db.DateTime(0)
+  updated_by      String?   @db.LongText
+
+  @@index([division_id], map: "mst_department_fk")
+}
+
+model mst_department_mapping {
+  id              Int     @id
+  department_id   Int?
+  ramco_dept_code String? @db.LongText
+  ramco_dept_name String? @db.LongText
+  is_deleted      String? @db.VarChar(5)
+
+  @@index([department_id], map: "mst_department_mapping_department_id_fkey")
+}
+
+model mst_division {
+  id            Int       @id
+  division_code String?   @db.LongText
+  division_desc String?   @db.LongText
+  created_at    DateTime? @db.DateTime(0)
+  created_by    String?   @db.LongText
+  updated_at    DateTime? @db.DateTime(0)
+  updated_by    String?   @db.LongText
+  is_active     String?   @db.VarChar(5)
+  is_deleted    String?   @db.VarChar(5)
+}
+
+model mst_employment {
+  id                  Int       @id @default(autoincrement())
+  deparment_id        Int?
+  grade_id            Int?
+  is_active           Int?
+  is_presdir          Int?
+  is_bod              Int?
+  is_depthead         Int?
+  created_at          DateTime? @db.DateTime(0)
+  created_by          String?   @db.VarChar(255)
+  master_ou_code      Int?
+  employee_code       String?   @db.VarChar(255)
+  employee_name       String?   @db.VarChar(255)
+  address_line_1      String?   @db.Text
+  address_line_2      String?   @db.Text
+  mail_id             String?   @db.VarChar(255)
+  employment_ou       Int?
+  employment_ou_desc  String?   @db.VarChar(255)
+  supervisor          String?   @db.VarChar(255)
+  supervisor_name     String?   @db.VarChar(255)
+  position_code       String?   @db.VarChar(255)
+  position_desc       String?   @db.VarChar(255)
+  job_grade_code      String?   @db.VarChar(255)
+  job_grade_desc      String?   @db.VarChar(255)
+  org_locn_work_code  String?   @db.VarChar(255)
+  org_locn_work_desc  String?   @db.VarChar(255)
+  profile_pic         String?   @db.VarChar(255)
+  department_code     String?   @db.VarChar(255)
+  department_desc     String?   @db.VarChar(255)
+  date_of_birth       DateTime? @db.Date
+  date_of_join        DateTime? @db.Date
+  job_classification  String?   @db.VarChar(255)
+  position_start_date DateTime? @db.Date
+  position_end_date   DateTime? @db.Date
+  phone_number        String?   @db.VarChar(50)
+}
+
+model mst_employment_bio {
+  employee_code       String    @id @db.VarChar(10)
+  is_active           Int?
+  gender_code         String?   @db.VarChar(10)
+  marital_status      String?   @db.VarChar(10)
+  nik                 String?   @db.VarChar(100)
+  npwp                String?   @db.VarChar(100)
+  bpjsk               String?   @db.VarChar(100)
+  bpjst               String?   @db.VarChar(100)
+  cost_center         String?   @db.VarChar(255)
+  profit_center       String?   @db.VarChar(255)
+  bank_code           String?   @db.VarChar(255)
+  beneficiary_bank    String?   @db.VarChar(255)
+  beneficiary_account String?   @db.VarChar(255)
+  account_name        String?   @db.VarChar(255)
+  created_at          DateTime? @db.DateTime(0)
+  updated_at          DateTime? @db.DateTime(0)
+}
+
+model mst_employment_ext {
+  id                  Int       @id @default(autoincrement())
+  deparment_id        Int?
+  grade_id            Int?
+  is_active           Int?
+  is_presdir          Int?
+  is_bod              Int?
+  is_depthead         Int?
+  created_at          DateTime? @db.DateTime(0)
+  created_by          String?   @db.VarChar(255)
+  master_ou_code      Int?
+  employee_code       String?   @db.VarChar(255)
+  employee_name       String?   @db.VarChar(255)
+  address_line_1      String?   @db.Text
+  address_line_2      String?   @db.Text
+  mail_id             String?   @db.VarChar(255)
+  employment_ou       Int?
+  employment_ou_desc  String?   @db.VarChar(255)
+  supervisor          String?   @db.VarChar(255)
+  supervisor_name     String?   @db.VarChar(255)
+  position_code       String?   @db.VarChar(255)
+  position_desc       String?   @db.VarChar(255)
+  job_grade_code      String?   @db.VarChar(255)
+  job_grade_desc      String?   @db.VarChar(255)
+  org_locn_work_code  String?   @db.VarChar(255)
+  org_locn_work_desc  String?   @db.VarChar(255)
+  profile_pic         String?   @db.VarChar(255)
+  department_code     String?   @db.VarChar(255)
+  department_desc     String?   @db.VarChar(255)
+  date_of_birth       DateTime? @db.Date
+  date_of_join        DateTime? @db.Date
+  job_classification  String?   @db.VarChar(255)
+  position_start_date DateTime? @db.Date
+  position_end_date   DateTime? @db.Date
+  phone_number        String?   @db.VarChar(50)
+}
+
+model mst_employment_ext_auth {
+  id         Int     @id @unique(map: "id") @default(autoincrement())
+  nik        String? @db.VarChar(255)
+  password   String? @db.VarChar(255)
+  created_at String? @db.VarChar(255)
+  created_by String? @db.VarChar(255)
+}
+
+model mst_grade {
+  id                      Int       @id
+  grade_code              String?   @db.LongText
+  is_presdir              String?   @db.VarChar(5)
+  is_bod                  String?   @db.VarChar(5)
+  is_active               String?   @db.VarChar(5)
+  is_deleted              String?   @db.VarChar(5)
+  created_at              DateTime? @db.DateTime(0)
+  created_by              String?   @db.LongText
+  updated_at              DateTime? @db.DateTime(0)
+  updated_by              String?   @db.LongText
+  level                   Int?
+  weight_objective_score  Float?    @db.Float
+  weight_core_value_score Float?    @db.Float
+}
+
+model mst_grade_mapping {
+  id               Int     @id
+  grade_id         Int?
+  ramco_grade_code String? @db.LongText
+  ramco_grade_desc String? @db.LongText
+  is_deleted       Int?
+
+  @@index([grade_id], map: "mst_grade_mapping_grade_id_fkey")
+}
+
+model mst_worklocn {
+  org_locn_work_code String  @id @db.VarChar(100)
+  org_locn_work_desc String? @db.VarChar(100)
+}
+
+model otsuka_emp_asgn_cont_vw_dest {
+  master_ou_code     Int
+  Employee_Code      String    @unique(map: "Employee_Code") @db.VarChar(30)
+  Address_Line_1     String?   @db.VarChar(80)
+  Address_Line_2     String?   @db.VarChar(80)
+  MailId             String?   @db.VarChar(80)
+  employment_ou      Int
+  employment_ou_desc String    @db.VarChar(128)
+  Supervisor         String?   @db.VarChar(30)
+  Supervisor_Name    String?   @db.VarChar(80)
+  Department_code    String?   @db.VarChar(10)
+  Department_desc    String?   @db.VarChar(255)
+  position_code      String?   @db.VarChar(10)
+  position_desc      String?   @db.VarChar(255)
+  job_grade_code     String?   @db.VarChar(5)
+  job_grade_desc     String?   @db.VarChar(255)
+  JOB_CLASSIFICATION String?   @db.VarChar(5)
+  org_work_locn_code String?   @db.VarChar(5)
+  org_work_locn_desc String?   @db.VarChar(255)
+  JOIN_DATE          DateTime? @db.DateTime(0)
+  RESIGN_DATE        DateTime? @db.DateTime(0)
+}
+
+model php_ms_login {
+  lg_nik             String    @id @db.VarChar(30)
+  lg_name            String?   @db.VarChar(255)
+  lg_password        String?   @db.VarChar(255)
+  lg_department      String?   @db.VarChar(255)
+  lg_location        String?   @db.VarChar(255)
+  lg_product         String?   @db.VarChar(255)
+  lg_email_aio       String?   @db.VarChar(255)
+  lg_email_private   String?   @db.VarChar(255)
+  lg_update          DateTime? @db.DateTime(0)
+  lg_propose         String?   @db.VarChar(100)
+  lg_admin           String?   @db.VarChar(100)
+  lg_retur           String?   @db.VarChar(100)
+  lg_retur_admin     String?   @db.VarChar(100)
+  lg_level           String?   @db.VarChar(100)
+  lg_type            String?   @db.VarChar(100)
+  lg_ga              String?   @db.VarChar(20)
+  lg_aktif           String?   @db.VarChar(20)
+  lg_costcenter      String?   @db.Char(8)
+  protean_location   String?   @db.VarChar(255)
+  protean_department String?   @db.VarChar(255)
+  lg_profitcenter    String?   @db.VarChar(255)
+  lg_corp_cc         String?   @db.VarChar(20)
+  tgl_rfc            DateTime? @db.DateTime(0)
+  lg_faktur          String?   @db.VarChar(20)
+  lg_claim_track     String?   @db.VarChar(20)
+  n_photo            String?   @db.VarChar(255)
+  n_phone            String?   @db.VarChar(50)
+  n_level            Int?
+  n_info             String?   @db.VarChar(255)
+  ifi_level          Int?
+  beclaim_level      Int?
+  cms_level          Int?
+  qc_level           Int?
+  invoice_level      Int?
+  visit_level        Int?
+  paper_level        Int?
+  apps_aktif         Int?
+  beclaim_kjy_level  Int?
+  ifi_kjy_level      Int?
+  invoice_kjy_level  Int?
+  beclaim_ho_level   Int?
+  lg_entitas         String?   @db.VarChar(50)
+  ihelprpt_level     Int?
+  rfid               String?   @db.VarChar(30)
+  section            Int?
+  sectionParent      Int?
+  categoryShift      String?   @db.VarChar(20)
+  isCS               Int?
+  facebook_URL       String?   @db.VarChar(255)
+  instagram_URL      String?   @db.VarChar(255)
+  limaes_level       Int?
+  iot_skb            Int?
+  lims_oto           String?   @db.VarChar(100)
+  gmp_apps           Int?
+  gen_apps           Int?
+  id_telegram        String?   @db.VarChar(255)
+  head1              String?   @db.VarChar(50)
+  head2              String?   @db.VarChar(50)
+  head3              String?   @db.VarChar(50)
+  isEmployee         Int?
+  apar_apps          Int?
+  qa_apk             Int?
+  role_wp            String?   @db.VarChar(255)
+  qa_lims_al4        Int?
+}
+
+model php_ms_login_os {
+  lg_name       String? @db.VarChar(255)
+  lg_nik        String? @db.VarChar(255)
+  sectionParent Int?
+  lg_location   Int?
+  id_company    Int?
+  lg_password   String? @db.VarChar(255)
+  pic           String? @db.VarChar(255)
+  id            Int     @id
+  gen_apps      Int?
+  lg_aktif      Int?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model sap_location {
+  id                   BigInt?
+  location_group       String? @db.VarChar(255)
+  location_description String? @db.VarChar(255)
+  iClaim               String? @db.VarChar(255)
+
+  @@ignore
+}

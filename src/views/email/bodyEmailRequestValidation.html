@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* CSS untuk email container */
+      .email-container {
+        margin: 5% 20% 1% 20%;
+        background: #ffffff;
+      }
+
+      .email-content {
+        padding: 2em 4em;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .email-container {
+          margin: 0;
+          width: 100%;
+        }
+
+        .email-body {
+          margin: 0;
+          padding: 0;
+        }
+
+        .email-content {
+          padding: 0px 20px;
+        }
+
+        .banner img {
+          width: 80%;
+        }
+      }
+
+      @media only screen and (max-width: 800px) {
+        .email-container {
+          margin: 0;
+          width: 100%;
+        }
+
+        .email-body {
+          margin: 0;
+          padding: 0;
+        }
+
+        .email-content {
+          padding: 0px 40px;
+        }
+
+        .banner img {
+          width: 80%;
+        }
+      }
+    </style>
+  </head>
+
+  <body style="font-family: 'Open Sans', sans-serif; color: black">
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+      crossorigin="anonymous"
+    />
+    <meta name="google-site-verification" content="OBHSOz2bJypVuqhse4EbUNPh6u4nlzaqmKaLoOryaqs" />
+    <main>
+      <div class="email-container">
+        <div class="email-body">
+          <div
+            class="banner"
+            style="
+              text-align: center;
+              background: rgb(247, 247, 247);
+              background: radial-gradient(
+                circle,
+                rgba(247, 247, 247, 1) 59%,
+                rgba(0, 115, 188, 1) 100%,
+                rgba(74, 151, 208, 1) 100%,
+                rgba(31, 111, 184, 1) 100%
+              );
+              color: white;
+              padding: 2em 5em;
+              overflow: hidden;
+            "
+          >
+            <img
+              src="https://myapps.aio.co.id/assets/logo/logo-dark.png"
+              alt=""
+              style="width: 50%; height: auto"
+            />
+          </div>
+          <div class="email-content" style="overflow: hidden; color: black">
+            <p style="color: black">Dear {{validatorName}},</p>
+            <p style="color: black">
+              Kami ingin menginformasikan mengenai request baru dari {{creatorName}} dengan detail
+              sebagai berikut:
+            </p>
+            <table style="width: 100%; color: black">
+              <tr>
+                <td style="width: 30%; font-weight: bold">Creator</td>
+                <td style="font-weight: bold">:</td>
+                <td>{{creatorName}}</td>
+              </tr>
+              <tr>
+                <td style="width: 30%; font-weight: bold">Ticket Name</td>
+                <td style="font-weight: bold">:</td>
+                <td>{{ticket_name}}</td>
+              </tr>
+              <tr>
+                <td style="width: 30%; font-weight: bold">Type</td>
+                <td style="font-weight: bold">:</td>
+                <td>{{type}}</td>
+              </tr>
+              <tr>
+                <td style="width: 30%; font-weight: bold">Creation Date</td>
+                <td style="font-weight: bold">:</td>
+                <td>{{creation_date}}</td>
+              </tr>
+              <tr>
+                <td style="width: 30%; font-weight: bold">Department Name</td>
+                <td style="font-weight: bold">:</td>
+                <td>{{department_name}}</td>
+              </tr>
+              <tr>
+                <td style="width: 30%; font-weight: bold">Background</td>
+                <td style="font-weight: bold"></td>
+                <td style="font-weight: bold"></td>
+              </tr>
+              <tr>
+                <td style="width: 30%;">What</td>
+                <td style="font-weight: bold">:</td>
+                <td>{{background_what}}</td>
+              </tr>
+              <tr>
+                <td style="width: 30%;">Who</td>
+                <td style="font-weight: bold">:</td>
+                <td>{{background_who}}</td>
+              </tr>
+              <tr>
+                <td style="width: 30%;">When</td>
+                <td style="font-weight: bold">:</td>
+                <td>{{background_when}}</td>
+              </tr>
+              <tr>
+                <td style="width: 30%;">Where</td>
+                <td style="font-weight: bold">:</td>
+                <td>{{background_where}}</td>
+              </tr>
+              <tr>
+                <td style="width: 30%;">Why</td>
+                <td style="font-weight: bold">:</td>
+                <td>{{background_why}}</td>
+              </tr>
+              <tr>
+                <td style="width: 30%;">How</td>
+                <td style="font-weight: bold">:</td>
+                <td>{{background_how}}</td>
+              </tr>
+              <tr>
+                <td style="width: 30%; font-weight: bold">Issue Description</td>
+                <td style="font-weight: bold">:</td>
+                <td>{{issue_description}}</td>
+              </tr>
+              <tr>
+                <td style="width: 30%; font-weight: bold">Business Impact</td>
+                <td style="font-weight: bold">:</td>
+                <td>{{business_impact}}</td>
+              </tr>
+            </table>
+            <br />
+
+            <p>
+              Mohon cek dan validasi request ini pada tautan berikut: 
+              <br />
+              <br />
+              <center>
+                <a href="{{validation_link}}" style="color: white; background-color: blue; font-style: italic; padding: 14px 82px; text-decoration: none;">
+                  Validasi tiket
+                </a>
+              </center>
+            </p>
+
+            <hr style="margin-top: 2em; background: red; color: red; padding: 1px" />
+            <p style="color: black">Best Regards,</p>
+            <p style="color: black"><em>ITS Section</em></p>
+          </div>
+        </div>
+        <div
+          class="banner"
+          style="
+            text-align: center;
+            background: rgb(118, 172, 220);
+            background: radial-gradient(
+              circle,
+              rgba(118, 172, 220, 1) 0%,
+              rgba(31, 111, 184, 1) 88%,
+              rgba(0, 115, 188, 1) 100%
+            );
+            color: white;
+            padding: 2em 5em;
+            overflow: hidden;
+          "
+        ></div>
+      </div>
+    </main>
+  </body>
+</html>

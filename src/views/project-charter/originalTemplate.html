@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Charter: {{overview.project_name}}</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        width: 210mm;
+        height: 297mm;
+        box-sizing: border-box;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: auto;
+      }
+      .container {
+        padding: 20mm;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin: 0;
+        padding: 0;
+        color: #405189;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #405189;
+        padding-bottom: 5px;
+      }
+      h3 {
+        font-size: 18px;
+        margin-top: 15px;
+        margin-bottom: 5px;
+      }
+      h4 {
+        font-size: 16px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+      }
+      .section {
+        margin-bottom: 20px;
+      }
+      .section p,
+      .section ul,
+      .section ol {
+        margin: 0;
+        padding: 0;
+      }
+      .section ul,
+      .section ol {
+        padding-left: 20px;
+      }
+      .section ul li,
+      .section ol li {
+        margin-bottom: 5px;
+      }
+      .overview,
+      .goals,
+      .urs,
+      .minimum-viable,
+      .risk {
+        page-break-inside: avoid;
+      }
+      .section div {
+        margin-bottom: 10px;
+      }
+      .section div p {
+        margin-bottom: 5px;
+      }
+      .section div ul,
+      .section div ol {
+        margin-top: 5px;
+      }
+      .section div ul li,
+      .section div ol li {
+        margin-bottom: 5px;
+      }
+
+      .table-show {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 14px; /* Smaller font size */
+        text-align: left;
+      }
+
+      .table-show th,
+      .table-show td {
+        padding: 8px 10px; /* Smaller padding */
+        border: 1px solid #ddd;
+      }
+
+      .table-show th {
+        background-color: #f2f2f2;
+      }
+
+      .table-show tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      .table-show tr:hover {
+        background-color: #f1f1f1;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="banner"
+      style="
+        text-align: center;
+        background: rgb(247, 247, 247);
+        background: radial-gradient(
+          circle,
+          rgba(247, 247, 247, 1) 59%,
+          rgba(0, 115, 188, 1) 100%,
+          rgba(74, 151, 208, 1) 100%,
+          rgba(31, 111, 184, 1) 100%
+        );
+        color: white;
+        padding: 2em 5em;
+        overflow: hidden;
+      "
+    >
+      <img
+        src="https://myapps.aio.co.id/assets/logo/logo-dark.png"
+        alt=""
+        style="width: 50%; height: auto"
+      />
+    </div>
+    <div class="container">
+      <div class="section overview">
+        <h1>Project Charter</h1>
+        <h2>Overview</h2>
+        <table class="table-show">
+          <tr>
+            <td><strong>Project Name:</strong></td>
+            <td>{{overview.project_name}}</td>
+          </tr>
+          <tr>
+            <td><strong>Department:</strong></td>
+            <td>{{overview.department_name}}</td>
+          </tr>
+          <tr>
+            <td><strong>Type:</strong></td>
+            <td>{{overview.type}}</td>
+          </tr>
+          <tr>
+            <td><strong>Expected Completion Date:</strong></td>
+            <td>{{overview.expected_completion_date}}</td>
+          </tr>
+        </table>
+        <div>
+          <h3>Background</h3>
+          <div>{{overflow.background}}</div>
+        </div>
+        <div>
+          <h3>Purpose</h3>
+          <div>{{overflow.purpose}}</div>
+        </div>
+        <div>
+          <h3>Success Measurement</h3>
+          <div>
+            {{overflow.success_measurement}}
+          </div>
+        </div>
+        <div>
+          <h3>Intangible Benefit</h3>
+          <div>
+            {{overflow.intangible_benefit}}
+          </div>
+        </div>
+        <div>
+          <h3>Impact of Not Doing</h3>
+          <div>
+            {{overflow.impact_of_not_doing}}
+          </div>
+        </div>
+      </div>
+      <div class="section goals">
+        <h2>Goals</h2>
+        <ul>
+          <li>Goall!!!</li>
+          <li>2-2</li>
+          <li>Goall!!!</li>
+          <li>2-2</li>
+          <li>Goall!!!</li>
+          <li>2-2</li>
+        </ul>
+      </div>
+      <div class="section urs">
+        <h2>User Requirements</h2>
+        <table class="table-show">
+          <tr>
+            <th>Module</th>
+            <th>Story Point</th>
+          </tr>
+          <tr>
+            <td>module 1</td>
+            <td>module 1</td>
+          </tr>
+          <tr>
+            <td>module 2</td>
+            <td>another module</td>
+          </tr>
+        </table>
+      </div>
+      <div class="section minimum-viable">
+        <h2>Minimum Viable Product</h2>
+        <p>Bisa deploy</p>
+      </div>
+      <div class="section risk">
+        <h2>Risk</h2>
+        <p><strong>Impact:</strong> LOW</p>
+        <p><strong>Probability:</strong> UNLIKELY</p>
+        <p><strong>Category:</strong> AVOID</p>
+      </div>
+
+      <div class="section participants">
+        <h2>Participants</h2>
+        <table class="table-show">
+          <tr>
+            <th>Profile Picture</th>
+            <th>Employee Code</th>
+            <th>Employee Name</th>
+            <th>Role</th>
+          </tr>
+          <tr>
+            <td>
+              <img
+                src="https://myperformance.aio.co.id:8080/services/file/downloadFileAsInline?file=036840.jpg&amp;returnName=036840.jpg"
+                alt="Hilman Abdurrahman Achmad"
+                style="width: 50px; height: auto"
+              />
+            </td>
+            <td>03684</td>
+            <td>Hilman Abdurrahman Achmad</td>
+            <td>Software Developer Supervisor</td>
+          </tr>
+          <tr>
+            <td>N/A</td>
+            <td>04189</td>
+            <td>Esto Triramdani Nurlustiawan</td>
+            <td>Software Developer</td>
+          </tr>
+          <tr>
+            <td>N/A</td>
+            <td>04429</td>
+            <td>Erwandi Pramudya</td>
+            <td>Software Developer</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div
+      class="banner"
+      style="
+        text-align: center;
+        background: rgb(118, 172, 220);
+        background: radial-gradient(
+          circle,
+          rgba(118, 172, 220, 1) 0%,
+          rgba(31, 111, 184, 1) 88%,
+          rgba(0, 115, 188, 1) 100%
+        );
+        color: white;
+        padding: 2em 5em;
+        overflow: hidden;
+      "
+    ></div>
+  </body>
+</html>

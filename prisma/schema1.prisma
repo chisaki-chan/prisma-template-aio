@@ -1,0 +1,569 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/database1"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL_1")
+}
+
+model map_category_to_group {
+  id           Int           @id @default(autoincrement())
+  category_id  Int?
+  group_id     Int?
+  created_at   DateTime?     @db.DateTime(0)
+  created_by   String?       @db.VarChar(100)
+  mst_group    mst_group?    @relation(fields: [group_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "map_category_to_group_ibfk_1")
+  mst_category mst_category? @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "map_category_to_group_ibfk_2")
+
+  @@index([category_id], map: "category_id")
+  @@index([group_id], map: "group_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model mst_application {
+  id                  Int          @id @default(autoincrement())
+  application_name    String?      @db.VarChar(255)
+  group_id_technician String?      @db.VarChar(255)
+  entity_id           Int?
+  department_code     String?      @db.VarChar(255)
+  is_deleted          Boolean?     @default(false)
+  created_at          DateTime?    @default(now()) @db.DateTime(0)
+  created_by          String?      @db.VarChar(255)
+  tr_request          tr_request[]
+}
+
+model mst_application_version {
+  id             Int       @id @default(autoincrement())
+  application_id Int?
+  version        String?   @db.VarChar(255)
+  content        String?   @db.VarChar(255)
+  golive_date    DateTime? @db.DateTime(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model mst_authorization {
+  id                  Int                @id @default(autoincrement())
+  employee_code       String             @unique(map: "employee_code") @db.VarChar(255)
+  employee_name       String?            @db.VarChar(255)
+  is_active           String?            @db.VarChar(1)
+  created_at          DateTime?          @default(now()) @db.DateTime(0)
+  created_by          String?            @db.VarChar(255)
+  technician_level    Int?
+  active_profile      Int?
+  active_entities     Int?
+  is_deleted          Boolean?           @default(false)
+  is_super_technician Int?
+  mst_entities        mst_entities?      @relation(fields: [active_entities], references: [id], onDelete: Cascade, map: "fk_entities")
+  mst_profile         mst_profile?       @relation(fields: [active_profile], references: [id], onDelete: Cascade, map: "fk_profile")
+  mst_manpower_cost   mst_manpower_cost? @relation(fields: [technician_level], references: [id], onUpdate: SetNull, map: "mst_authorization_ibfk_1")
+  tr_project_task     tr_project_task[]
+  tr_project_team     tr_project_team[]
+  tr_task             tr_task[]
+
+  @@index([active_entities], map: "fk_entities")
+  @@index([active_profile], map: "fk_profile")
+  @@index([technician_level], map: "technician_level")
+}
+
+model mst_authorization_profile {
+  id            Int          @id @default(autoincrement())
+  employee_code String?      @db.VarChar(255)
+  profile_id    Int?
+  entities_id   Int?
+  created_at    DateTime?    @db.DateTime(0)
+  created_by    String?      @db.VarChar(255)
+  mst_profile   mst_profile? @relation(fields: [profile_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "mst_authorization_profile_ibfk_1")
+
+  @@index([profile_id], map: "profile_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model mst_authorization_usergroup {
+  id            Int        @id @default(autoincrement())
+  employee_code String?    @db.VarChar(20)
+  group_id      Int?
+  is_manager    String?    @db.VarChar(10)
+  created_at    DateTime?  @db.DateTime(0)
+  created_by    String?    @db.VarChar(255)
+  mst_group     mst_group? @relation(fields: [group_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "mst_authorization_usergroup_ibfk_1")
+
+  @@index([employee_code], map: "employee_code")
+  @@index([group_id], map: "group_id")
+}
+
+model mst_category {
+  id                    Int                     @id @default(autoincrement())
+  category_code         String?                 @db.VarChar(20)
+  category_name         String?                 @db.VarChar(100)
+  is_active             String?                 @default("1") @db.VarChar(255)
+  created_at            DateTime?               @db.DateTime(0)
+  created_by            String?                 @db.VarChar(100)
+  map_category_to_group map_category_to_group[]
+  tr_request            tr_request[]
+}
+
+model mst_entities {
+  id                Int                 @id @default(autoincrement())
+  entities_name     String?             @db.VarChar(255)
+  parent_id         Int?
+  created_at        DateTime?           @db.DateTime(0)
+  created_by        String?             @db.VarChar(50)
+  mst_authorization mst_authorization[]
+}
+
+model mst_group {
+  id                          Int                           @id @default(autoincrement())
+  entities_id                 Int?
+  group_name                  String?                       @db.VarChar(255)
+  parent_id                   Int?
+  is_deleted                  Boolean?                      @default(false)
+  created_at                  DateTime?                     @default(now()) @db.DateTime(0)
+  created_by                  String?                       @db.VarChar(255)
+  map_category_to_group       map_category_to_group[]
+  mst_authorization_usergroup mst_authorization_usergroup[]
+  tr_project                  tr_project[]
+}
+
+model mst_manpower_cost {
+  id                Int                 @id @default(autoincrement())
+  technician_level  String?             @unique(map: "technician_level") @db.VarChar(255)
+  hourly            Float?              @default(0)
+  monthly           Float?              @default(0)
+  created_at        DateTime?           @default(now()) @db.Timestamp(0)
+  created_by        String?             @db.VarChar(255)
+  mst_authorization mst_authorization[]
+}
+
+model mst_profile {
+  id                        Int                         @id @default(autoincrement())
+  profile_name              String?                     @db.VarChar(255)
+  is_deleted                Boolean?                    @default(false)
+  created_at                DateTime?                   @default(now()) @db.DateTime(0)
+  created_by                String?                     @db.VarChar(255)
+  mst_authorization         mst_authorization[]
+  mst_authorization_profile mst_authorization_profile[]
+}
+
+model mst_project_flow {
+  id              Int               @id @default(autoincrement())
+  flow            String?           @db.VarChar(255)
+  desc            String?           @db.Text
+  pic             String?           @db.VarChar(255)
+  action          String?           @db.VarChar(255)
+  icon            String?           @db.VarChar(255)
+  created_at      DateTime?         @default(now()) @db.DateTime(0)
+  created_by      String?           @db.VarChar(255)
+  tr_project_flow tr_project_flow[]
+}
+
+model mst_project_state {
+  id         Int          @id @default(autoincrement())
+  status     String?      @db.VarChar(255)
+  created_at DateTime?    @db.DateTime(0)
+  created_by String?      @db.VarChar(50)
+  tr_project tr_project[]
+}
+
+model mst_role {
+  id         Int      @id @default(autoincrement())
+  role       String?  @db.VarChar(100)
+  is_deleted Boolean? @default(false)
+}
+
+model tr_document {
+  id         Int       @id @default(autoincrement())
+  type       String?   @db.VarChar(50)
+  type_id    Int?
+  name       String?   @db.VarChar(255)
+  filename   String?   @db.VarChar(255)
+  filepath   String?   @db.VarChar(255)
+  filesize   Float?
+  mime       String?   @db.VarChar(255)
+  is_deleted String?   @default("0") @db.VarChar(255)
+  created_at DateTime? @default(now()) @db.DateTime(0)
+  created_by String?   @db.VarChar(255)
+
+  @@index([type, type_id], map: "Type & Type ID")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tr_history {
+  id          Int       @id @default(autoincrement())
+  type        String?   @db.VarChar(255)
+  type_id     Int?
+  action      String?   @db.VarChar(255)
+  document_id Int?
+  created_at  DateTime? @db.DateTime(0)
+  created_by  String?   @db.VarChar(255)
+}
+
+model tr_notification {
+  id                Int       @id @default(autoincrement())
+  notification_type String?   @db.VarChar(255)
+  employee_code     String?   @db.VarChar(255)
+  message           String?   @db.VarChar(255)
+  action_url        String?   @db.VarChar(255)
+  is_read           Boolean?  @default(false)
+  created_at        DateTime? @default(now()) @db.DateTime(0)
+  created_by        String?   @db.VarChar(255)
+  title             String?   @db.VarChar(255)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tr_project {
+  id                        Int                         @id @default(autoincrement())
+  request_id                Int?
+  application_id            Int?
+  project_name              String?                     @db.VarChar(255)
+  survey_id                 Int?
+  project_code              String?                     @db.VarChar(255)
+  thumbnail                 String?                     @db.VarChar(255)
+  background                String?                     @db.LongText
+  issue_description         String?                     @db.LongText
+  business_impact           String?                     @db.LongText
+  group_id                  Int?
+  plan_start_date           DateTime?                   @db.DateTime(0)
+  plan_end_date             DateTime?                   @db.DateTime(0)
+  real_start_date           DateTime?                   @db.DateTime(0)
+  real_end_date             DateTime?                   @db.DateTime(0)
+  expected_completion       DateTime?                   @db.DateTime(0)
+  percent_done              String?                     @db.VarChar(255)
+  auto_percent_done         Boolean?
+  state                     Int?
+  is_deleted                String?                     @default("0") @db.VarChar(255)
+  created_at                DateTime?                   @default(now()) @db.DateTime(0)
+  created_by                String?                     @db.VarChar(255)
+  type                      String?                     @db.VarChar(255)
+  mst_group                 mst_group?                  @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_master_group")
+  mst_project_state         mst_project_state?          @relation(fields: [state], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_master_state")
+  tr_request                tr_request?                 @relation(fields: [request_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "tr_project_ibfk_1")
+  tr_project_flow           tr_project_flow[]
+  tr_project_minimum_viable tr_project_minimum_viable[]
+  tr_project_overview       tr_project_overview[]
+  tr_project_overview_goals tr_project_overview_goals[]
+  tr_project_task           tr_project_task[]
+  tr_satisfaction           tr_satisfaction[]
+
+  @@index([group_id], map: "fk_master_group")
+  @@index([state], map: "fk_master_state")
+  @@index([request_id], map: "request_id")
+}
+
+model tr_project_activity {
+  id              Int                        @id @default(autoincrement())
+  project_id      Int?
+  project_flow_id Int?
+  activity_name   String?                    @db.VarChar(255)
+  date            DateTime?                  @db.DateTime(0)
+  content         String?                    @db.VarChar(255)
+  document        String?                    @db.VarChar(255)
+  created_at      DateTime?                  @db.DateTime(0)
+  created_by      String?                    @db.VarChar(255)
+  state           tr_project_activity_state?
+  tr_project_flow tr_project_flow?           @relation(fields: [project_flow_id], references: [id], onUpdate: SetNull, map: "FK_project_flow_id")
+
+  @@index([project_flow_id], map: "FK_project_flow_id")
+}
+
+model tr_project_flow {
+  id                  Int                    @id @default(autoincrement())
+  project_id          Int?
+  flow_id             Int?
+  updated_at          DateTime?              @db.DateTime(0)
+  updated_by          String?                @db.VarChar(255)
+  state               tr_project_flow_state?
+  tr_project_activity tr_project_activity[]
+  mst_project_flow    mst_project_flow?      @relation(fields: [flow_id], references: [id], onUpdate: SetNull, map: "FK_flow")
+  tr_project          tr_project?            @relation(fields: [project_id], references: [id], onUpdate: SetNull, map: "FK_project")
+
+  @@index([flow_id], map: "FK_flow")
+  @@index([project_id], map: "FK_project")
+}
+
+model tr_project_minimum_viable {
+  id             Int         @id @default(autoincrement())
+  project_id     Int?
+  minimum_viable String?     @db.LongText
+  created_at     DateTime?   @default(now()) @db.DateTime(0)
+  created_by     String?     @db.VarChar(255)
+  is_deleted     Boolean?    @default(false)
+  tr_project     tr_project? @relation(fields: [project_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "tr_project_overview_goals_FK_copy")
+
+  @@index([project_id], map: "tr_project_overview_goals_FK")
+}
+
+model tr_project_overview {
+  id                       Int         @id @default(autoincrement())
+  project_id               Int?
+  background               String?     @db.LongText
+  purpose                  String?     @db.LongText
+  success_measurement      String?     @db.LongText
+  intangible_benefit       String?     @db.LongText
+  impact_of_not_doing      String?     @db.LongText
+  created_at               DateTime?   @default(now()) @db.DateTime(0)
+  created_by               String?     @db.VarChar(255)
+  project_name             String?     @db.VarChar(255)
+  department_name          String?     @db.VarChar(255)
+  type                     String?     @db.VarChar(255)
+  expected_completion_date DateTime?   @db.Date
+  application              String?     @db.VarChar(255)
+  tr_project               tr_project? @relation(fields: [project_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "tr_project_overview_FK")
+
+  @@index([project_id], map: "tr_project_overview_FK")
+}
+
+model tr_project_overview_goals {
+  id         Int         @id @default(autoincrement())
+  project_id Int?
+  goal       String?     @db.LongText
+  created_at DateTime?   @default(now()) @db.DateTime(0)
+  created_by String?     @db.VarChar(255)
+  is_deleted Boolean?    @default(false)
+  tr_project tr_project? @relation(fields: [project_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "tr_project_overview_goals_FK")
+
+  @@index([project_id], map: "tr_project_overview_goals_FK")
+}
+
+model tr_project_participant {
+  id            Int       @id @default(autoincrement())
+  project_id    Int?
+  employee_code String?   @db.VarChar(10)
+  role          String?   @db.VarChar(255)
+  is_deleted    Boolean?  @default(false)
+  created_at    DateTime? @default(now()) @db.DateTime(0)
+  created_by    String?   @db.VarChar(255)
+}
+
+model tr_project_risk_mitigation {
+  id           Int       @id @default(autoincrement())
+  project_id   Int?
+  risk         String?   @db.LongText
+  risk_control String?   @db.LongText
+  impact       String?   @db.VarChar(100)
+  probability  String?   @db.VarChar(100)
+  category     String?   @db.VarChar(100)
+  created_at   DateTime? @default(now()) @db.DateTime(0)
+  created_by   String?   @db.VarChar(255)
+  is_deleted   Boolean?  @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tr_project_scope {
+  id          Int       @id @default(autoincrement())
+  project_id  Int?
+  module      String?   @db.VarChar(255)
+  story_point String?   @db.Text
+  type        String?   @db.VarChar(255)
+  created_at  DateTime? @default(now()) @db.DateTime(0)
+  created_by  String?   @db.VarChar(255)
+  is_deleted  Boolean?  @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tr_project_task {
+  id                    Int                @id @default(autoincrement())
+  project_id            Int?
+  task_name             String?            @db.VarChar(255)
+  content               String?            @db.LongText
+  plan_start_date       DateTime?          @db.DateTime(0)
+  plan_end_date         DateTime?          @db.DateTime(0)
+  real_start_date       DateTime?          @db.DateTime(0)
+  real_end_date         DateTime?          @db.DateTime(0)
+  plan_duration         Int?
+  real_duration         Int?
+  percent_done          Float?
+  auto_calculated       Boolean?
+  cost                  Float?
+  task_type             String?            @db.VarChar(255)
+  created_at            DateTime?          @default(now()) @db.Timestamp(0)
+  created_by            String?            @db.VarChar(25)
+  task_category         String?            @db.VarChar(50)
+  is_deleted            Boolean?           @default(false)
+  parent_id             Int?
+  pic                   String?            @db.VarChar(255)
+  status                String?            @db.VarChar(50)
+  tr_project            tr_project?        @relation(fields: [project_id], references: [id], onUpdate: SetNull, map: "tr_project_task_ibfk_1")
+  tr_project_task       tr_project_task?   @relation("tr_project_taskTotr_project_task", fields: [parent_id], references: [id], onUpdate: SetNull, map: "tr_project_task_ibfk_2")
+  other_tr_project_task tr_project_task[]  @relation("tr_project_taskTotr_project_task")
+  mst_authorization     mst_authorization? @relation(fields: [pic], references: [employee_code], onUpdate: SetNull, map: "tr_project_task_ibfk_3")
+
+  @@index([is_deleted], map: "is_deleted")
+  @@index([parent_id], map: "parent_id")
+  @@index([pic], map: "pic")
+  @@index([project_id], map: "project_id")
+  @@index([task_category], map: "task_category")
+  @@index([task_type], map: "task_type")
+}
+
+model tr_project_team {
+  id                Int                @id @default(autoincrement())
+  project_id        Int?
+  employee_code     String?            @db.VarChar(10)
+  is_deleted        Boolean?           @default(false)
+  created_at        DateTime?          @default(now()) @db.DateTime(0)
+  created_by        String?            @db.VarChar(255)
+  mst_authorization mst_authorization? @relation(fields: [employee_code], references: [employee_code], onUpdate: SetNull, map: "tr_project_team_ibfk_1")
+
+  @@index([employee_code], map: "tr_project_team_ibfk_1")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tr_request {
+  id                       Int                     @id @default(autoincrement())
+  entities_id              Int?
+  application_id           Int?
+  category                 Int?
+  ticket_name              String?                 @db.VarChar(255)
+  creation_date            DateTime?               @default(now()) @db.Date
+  closed_date              DateTime?               @db.Date
+  creator                  String?                 @db.VarChar(255)
+  status                   String?                 @db.VarChar(255)
+  urgency                  String?                 @db.VarChar(255)
+  expected_completion_date DateTime?               @db.Date
+  type                     String?                 @db.VarChar(255)
+  department_code          String?                 @db.VarChar(255)
+  department_name          String?                 @db.VarChar(255)
+  is_project               String?                 @db.VarChar(255)
+  background               String?                 @db.Text
+  issue_description        String?                 @db.Text
+  business_impact          String?                 @db.Text
+  created_at               DateTime?               @default(now()) @db.DateTime(0)
+  created_by               String?                 @db.VarChar(255)
+  impact                   String?                 @db.VarChar(255)
+  priority                 String?                 @db.VarChar(255)
+  background_what          String?                 @db.Text
+  background_who           String?                 @db.Text
+  background_when          String?                 @db.Text
+  background_where         String?                 @db.Text
+  background_why           String?                 @db.Text
+  background_how           String?                 @db.Text
+  tr_project               tr_project[]
+  mst_category             mst_category?           @relation(fields: [category], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "tr_request_ibfk_1")
+  mst_application          mst_application?        @relation(fields: [application_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "tr_request_ibfk_2")
+  tr_request_validation    tr_request_validation[]
+  tr_satisfaction          tr_satisfaction[]
+
+  @@index([category], map: "category")
+  @@index([application_id], map: "tr_request_ibfk_2")
+}
+
+model tr_request_technician {
+  id            Int       @id @default(autoincrement())
+  request_id    Int?
+  employee_code String?   @db.VarChar(10)
+  is_deleted    Boolean?  @default(false)
+  created_at    DateTime? @default(now()) @db.DateTime(0)
+  created_by    String?   @db.VarChar(255)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tr_request_validation {
+  id                 Int         @id @default(autoincrement())
+  request_id         Int?
+  user_id            String?     @db.VarChar(255)
+  user_id_validate   String?     @db.VarChar(255)
+  comment_submission String?     @db.VarChar(255)
+  comment_validation String?     @db.VarChar(255)
+  status             String?     @db.VarChar(255)
+  submission_date    DateTime?   @default(now()) @db.DateTime(0)
+  validation_date    DateTime?   @db.DateTime(0)
+  state              String?     @db.VarChar(255)
+  tr_request         tr_request? @relation(fields: [request_id], references: [id], onUpdate: SetNull, map: "FK_REQUEST")
+
+  @@index([request_id], map: "FK_REQUEST")
+}
+
+model tr_satisfaction {
+  id                      Int                      @id @default(autoincrement())
+  target                  String?                  @db.VarChar(255)
+  project_id              Int?
+  request_id              Int?
+  developer_employee_code String?                  @db.VarChar(255)
+  overall_comment         String?                  @db.VarChar(255)
+  created_at              DateTime?                @default(now()) @db.DateTime(0)
+  created_by              String?                  @db.VarChar(255)
+  deleted                 Boolean                  @default(false)
+  request                 tr_request?              @relation(fields: [request_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "tr_satisfaction_ibfk_1")
+  project                 tr_project?              @relation(fields: [project_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "tr_satisfaction_ibfk_2")
+  ratings                 tr_satisfaction_rating[]
+
+  @@index([project_id], map: "project_id")
+  @@index([request_id], map: "request_id")
+}
+
+model tr_satisfaction_rating {
+  id              Int             @id @default(autoincrement())
+  satisfaction_id Int
+  rating_type     String          @db.VarChar(255)
+  rating_scale    Int?
+  rating_value    Int?
+  rating_score    Int?
+  rating_question String?         @db.VarChar(255)
+  rating_comment  String?         @db.VarChar(255)
+  deleted         Boolean         @default(false)
+  created_by      String?         @db.VarChar(255)
+  created_at      DateTime?       @default(now()) @db.DateTime(0)
+  satisfaction    tr_satisfaction @relation(fields: [satisfaction_id], references: [id], onDelete: Cascade)
+
+  @@index([satisfaction_id], map: "satisfaction_id")
+}
+
+model mst_satisfaction_question {
+  id              Int       @id @default(autoincrement())
+  target          String?   @db.VarChar(255)
+  rating_type     String    @db.VarChar(255)
+  rating_scale    Int?
+  rating_question String?   @db.VarChar(255)
+  deleted         Boolean   @default(false)
+  created_at      DateTime? @default(now()) @db.DateTime(0)
+  created_by      String?   @db.VarChar(255)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tr_task {
+  id                Int                @id @default(autoincrement())
+  application_id    Int?
+  application_name  String?            @db.VarChar(255)
+  task_code         String?            @db.VarChar(100)
+  task_name         String?            @db.VarChar(255)
+  description       String?            @db.VarChar(255)
+  attachment        String?            @db.VarChar(255)
+  due_date          DateTime?          @db.Date
+  tags              String?            @db.VarChar(255)
+  status            String?            @db.VarChar(255)
+  percent_done      Int?
+  pic               String?            @db.VarChar(255)
+  is_archive        Int?
+  is_deleted        Int?
+  created_at        DateTime?          @db.DateTime(0)
+  created_by        String?            @db.VarChar(255)
+  updated_at        DateTime?          @db.DateTime(0)
+  updated_by        String?            @db.VarChar(50)
+  mst_authorization mst_authorization? @relation(fields: [pic], references: [employee_code], onUpdate: SetNull, map: "tr_task_ibfk_1")
+
+  @@index([pic], map: "pic")
+}
+
+model tr_task_additional_team {
+  id            Int       @id @default(autoincrement())
+  task_id       Int?
+  employee_code String?   @db.VarChar(50)
+  created_at    DateTime? @db.DateTime(0)
+  created_by    String?   @db.VarChar(100)
+  updated_at    DateTime? @db.DateTime(0)
+  updated_by    String?   @db.VarChar(100)
+}
+
+enum tr_project_flow_state {
+  Pending
+  Progress
+  Done
+}
+
+enum tr_project_activity_state {
+  Pending
+  Progress
+  Done
+}

@@ -1,0 +1,30 @@
+export interface IDashboardProject {
+  id: number
+  project_id: number
+  request_id: number
+  application_id: any
+  project_name: string
+  survey_id: any
+  project_code: string
+  thumbnail: any
+  background: any
+  issue_description: string
+  business_impact: string
+  group_id: number
+  plan_start_date: string
+  plan_end_date: string
+  real_start_date: any
+  real_end_date: any
+  expected_completion: string
+  percent_done: string
+  auto_percent_done: number
+  state: number
+  is_deleted: string
+  created_at: string
+  created_by: string
+  type: string
+  category: number
+  department_code: string
+  cost: number
+  created_at_from_request: string
+}

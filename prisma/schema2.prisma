@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/database2"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL_2")
+}
+
+model PHP_ms_login {
+  lg_nik               String    @unique @db.VarChar(30)
+  lg_name              String?   @db.VarChar(255)
+  lg_password          String?   @db.VarChar(255)
+  lg_department        String?   @db.VarChar(255)
+  lg_location          String?   @db.VarChar(255)
+  lg_product           String?   @db.VarChar(255)
+  lg_email_aio         String?   @db.VarChar(255)
+  lg_email_private     String?   @db.VarChar(255)
+  lg_update            DateTime? @db.DateTime
+  lg_propose           String?   @db.Char(1)
+  lg_admin             String?   @db.Char(1)
+  lg_retur             String?   @db.Char(1)
+  lg_retur_admin       String?   @db.Char(1)
+  lg_level             String?   @db.VarChar(100)
+  lg_type              String?   @db.VarChar(100)
+  lg_ga                String?   @db.Char(1)
+  lg_aktif             String?   @db.Char(1)
+  lg_costcenter        String?   @db.Char(8)
+  protean_location     String?   @db.VarChar(255)
+  protean_department   String?   @db.VarChar(255)
+  lg_profitcenter      String?   @db.VarChar(255)
+  lg_corp_cc           String?   @db.Char(1)
+  tgl_rfc              DateTime? @db.DateTime
+  lg_faktur            String?   @db.Char(1)
+  lg_claim_track       String?   @db.Char(1)
+  n_photo              String?   @db.VarChar(255)
+  n_phone              String?   @db.VarChar(50)
+  n_level              Int?
+  n_info               String?   @db.VarChar(255)
+  ifi_level            Int?
+  beclaim_level        Int?
+  cms_level            Int?
+  qc_level             Int?
+  invoice_level        Int?
+  visit_level          Int?
+  paper_level          Int?
+  apps_aktif           Int?
+  beclaim_kjy_level    Int?
+  ifi_kjy_level        Int?
+  invoice_kjy_level    Int?
+  beclaim_ho_level     Int?
+  lg_entitas           String?   @db.VarChar(50)
+  ihelprpt_level       Int?
+  rfid                 String?   @db.VarChar(30)
+  section              Int?
+  sectionParent        Int?
+  categoryShift        String?   @db.VarChar(20)
+  isCS                 Int?
+  facebook_URL         String?   @db.VarChar(255)
+  instagram_URL        String?   @db.VarChar(255)
+  limaes_level         Int?
+  iot_skb              Int?
+  lims_oto             String?   @db.VarChar(100)
+  gmp_apps             Int?
+  gen_apps             Int?
+  id_telegram          String?   @db.VarChar(255)
+  head1                String?   @db.VarChar(50)
+  head2                String?   @db.VarChar(50)
+  head3                String?   @db.VarChar(50)
+  isEmployee           Int?
+  apar_apps            Int?
+  qa_apk               Int?
+  role_wp              String?   @db.VarChar(255)
+  qa_lims_al4          Int?
+  is_temporary_account Int?
+  expired_date_temp    DateTime? @db.Date
+  nik_intern           String?   @db.VarChar(30)
+}
